@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="redditApp">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Toby Dossin - Reddit App</title>
+	<link rel="stylesheet" href="css/style.css" />
+	<!-- include the AngularJS library -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.12/angular.min.js"></script>
+	<!-- also include our application-specific scripts -->
+	<script src="js/scripts.js"></script>
+</head>
+<body ng-controller="redditCtrl">
+	<!-- while building the array, show the user a message to let them know it's working -->
+	<div ng-hide="posts.length" class="wait">Retrieving posts...</div>
+	<!-- iterate through the $scope.posts array and display according to the template below -->
+	<!-- 'orderBy' sorts in ascending order by default, so we'll add a negative operator (-) to reverse it -->
+	<div class="indPost" ng-repeat="post in posts | orderBy:'-data.ups'" ng-cloak>	
+		<div class="upVotes">
+			<!-- show the current number of upvotes to show that 'orderBy' is working correctly -->
+			<span class="ups">{{post.data.score}}</span>
+			<span class="upsLable">Upvotes</span>
+		</div><!-- /upVotes -->
+		<!-- if the post is an image, display the thumbnail here -->
+		<div class="thumbWrap">
+			<img ng-show="post.data.post_hint == 'image'" ng-src="{{post.data.thumbnail}}" alt="{{post.data.title}}" class="postThumbnail"/>
+		</div><!-- /thumbWrap-->
+		<div class="postData">
+			<!-- just like on the actual Reddit.com, the post's title will also be the link -->
+			<a class="titleLink" ng-href="{{post.data.url}}">
+				{{post.data.title}}
+			</a>
+			<div class="postMeta">
+				<!-- display additional info about the post and provide links to the user's posts and this post's subreddit -->
+				Posted to <a ng-href="https://reddit.com/r/{{post.data.subreddit}}">/r/{{post.data.subreddit}}</a> by user <a ng-href="https://reddit.com/u/{{post.data.author}}">/u/{{post.data.author}}</a>. 
+				<!-- provide a link to the comments and show the number of comments the post currently has -->
+				<br/><a ng-href="https://reddit.com{{post.data.permalink}}">Comments({{post.data.num_comments}})</a>
+			</div><!-- /postMeta -->
+		</div><!-- /postData -->
+	</div><!-- /indPost -->
+</body>
+</html>
